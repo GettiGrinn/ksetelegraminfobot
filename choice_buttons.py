@@ -9,7 +9,8 @@ user_menu = ReplyKeyboardMarkup(
 
         ],
         [
-            KeyboardButton(text="Индекс и капитализация")
+            KeyboardButton(text="Индекс и капитализация"),
+            KeyboardButton(text="Ценные бумаги"),
 
         ],
     ],
