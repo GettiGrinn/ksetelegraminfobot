@@ -5,8 +5,9 @@ from choice_buttons import user_menu, trade_button
 from aiogram import Bot, Dispatcher, executor
 from config import BOT_TOKEN
 from telegram_bot_pagination import InlineKeyboardPaginator
+from db_handlers import init_db, add_message
 
-
+init_db()
 bot = Bot(BOT_TOKEN, parse_mode="HTML")
 dp = Dispatcher(bot)
 
@@ -14,11 +15,13 @@ dp = Dispatcher(bot)
 @dp.message_handler(Command("start"))
 async def show_menu(message: Message):
     await message.answer(text="Выберите из списка необходимую опцию\n", reply_markup=user_menu)
+    add_message(message.from_user.id, message.text)
 
 
 @dp.message_handler(Command("update"))
 async def show_menu(message: Message):
     await message.answer(text="Выберите из списка необходимую опцию \n", reply_markup=user_menu)
+    add_message(message.from_user.id, message.text)
 
 
 @dp.message_handler(Text(equals=["Котировки \U0001F4CA", "Итоги последних сделок \U0001F4DD",
@@ -32,15 +35,20 @@ async def show_menu(message: Message):
     elif message.text == 'Итоги последних сделок \U0001F4DD':
         await message.answer(get_trade_results(), reply_markup=trade_button)
     elif message.text == 'Ценные бумаги':
-        await message.answer("Введите код ценной бумаги, для которой необходимо получить информацию. Например,KENB,ZLKR или AYLB")
+        await message.answer("Введите код ценной бумаги, для которой необходимо получить информацию. "
+                             "Например,KENB,ZLKR или AYLB")
 
     else:
         await message.answer("Опция находится в разработке")
+
+    add_message(message.from_user.id, message.text)
 
 
 @dp.message_handler()
 async def echo_message(message: Message):
     await message.answer(get_listing_result(message.text))
+    add_message(message.from_user.id, message.text)
+
 
 @dp.callback_query_handler(text_contains="company")
 async def get_company_trade_info(callback_query: CallbackQuery):
