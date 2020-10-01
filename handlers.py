@@ -95,6 +95,8 @@ def get_listing_result(query_text):
         return get_listing("ОАО \"РСК Банк\"")
     elif query_text == "MAIR":
         return get_listing("ОАО \"Международный аэропорт Манас\"")
+    elif query_text == "AYLB":
+        return get_listing("ОАО \"Айыл Банк\"")
     elif query_text == "FKDB":
         return get_listing("ОАО \"ФинансКредитБанк КАБ\"")
     elif query_text == "ELST":
