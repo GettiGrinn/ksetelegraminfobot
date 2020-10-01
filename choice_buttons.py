@@ -19,7 +19,7 @@ user_menu = ReplyKeyboardMarkup(
 
 trade_button = InlineKeyboardMarkup(inline_keyboard=[
     [
-        InlineKeyboardButton('По компаниям', callback_data='company')
+        InlineKeyboardButton('\U0001F4CE Посмотреть торги по компаниям', callback_data='company')
 
     ]
 ])
