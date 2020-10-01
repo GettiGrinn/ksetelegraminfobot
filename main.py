@@ -1,10 +1,11 @@
 from aiogram.dispatcher.filters import Command, Text
-from handlers import get_quontation, get_index, get_trade_results, get_company_trade_results
+from handlers import get_quontation, get_index, get_trade_results, get_company_trade_results, get_listing_result
 from aiogram.types import Message, CallbackQuery
 from choice_buttons import user_menu, trade_button
 from aiogram import Bot, Dispatcher, executor
 from config import BOT_TOKEN
 from telegram_bot_pagination import InlineKeyboardPaginator
+
 
 bot = Bot(BOT_TOKEN, parse_mode="HTML")
 dp = Dispatcher(bot)
@@ -12,11 +13,16 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(Command("start"))
 async def show_menu(message: Message):
+    await message.answer(text="Выберите из списка необходимую опцию\n", reply_markup=user_menu)
+
+
+@dp.message_handler(Command("update"))
+async def show_menu(message: Message):
     await message.answer(text="Выберите из списка необходимую опцию \n", reply_markup=user_menu)
 
 
 @dp.message_handler(Text(equals=["Котировки \U0001F4CA", "Итоги последних сделок \U0001F4DD",
-                    "Индекс и капитализация"]))
+                    "Индекс и капитализация", "Ценные бумаги"]))
 async def show_menu(message: Message):
 
     if message.text == 'Котировки \U0001F4CA':
@@ -25,10 +31,16 @@ async def show_menu(message: Message):
         await message.answer(get_index())
     elif message.text == 'Итоги последних сделок \U0001F4DD':
         await message.answer(get_trade_results(), reply_markup=trade_button)
+    elif message.text == 'Ценные бумаги':
+        await message.answer("Введите код ценной бумаги, для которой необходимо получить информацию. Например,KENB,ZLKR или AYLB")
 
     else:
         await message.answer("Опция находится в разработке")
 
+
+@dp.message_handler()
+async def echo_message(message: Message):
+    await message.answer(get_listing_result(message.text))
 
 @dp.callback_query_handler(text_contains="company")
 async def get_company_trade_info(callback_query: CallbackQuery):
