@@ -1,8 +1,15 @@
-import sqlite3
+import mysql.connector
 
 
 def get_connection():
-    connection = sqlite3.connect('user.db')
+    connection = mysql.connector.connect(
+          host="sql12.freemysqlhosting.net",
+          user="sql12368189",
+          password="C3pc4Wu3bJ",
+          database="sql12368189",
+          port="3306"
+    )
+
     return connection
 
 
@@ -14,9 +21,9 @@ def init_db(force: bool = False):
         cursor.execute('DROP TABLE IF EXISTS user_message')
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS user_message(
-        id          INTEGER PRIMARY_KEY,
+        id          INTEGER AUTO_INCREMENT PRIMARY KEY,
         user_id     INTEGER NOT NULL,
-        text        TEXT NOT NULL
+        text        VARCHAR(255) NOT NULL
         )
     ''')
 
@@ -26,5 +33,7 @@ def init_db(force: bool = False):
 def add_message(user_id: int, text: str):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO user_message (user_id,text) VALUES(?, ?)", (user_id, text))
+    sql = "INSERT INTO user_message(user_id, text) VALUES (%s, %s)"
+    val = (user_id, text)
+    cursor.execute(sql, val)
     conn.commit()
