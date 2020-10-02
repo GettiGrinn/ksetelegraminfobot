@@ -18,22 +18,24 @@ def init_db(force: bool = False):
     cursor = conn.cursor()
 
     if force:
-        cursor.execute('DROP TABLE IF EXISTS user_message')
+        cursor.execute('DROP TABLE IF EXISTS user_query')
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS user_message(
+        CREATE TABLE IF NOT EXISTS user_query(
         id          INTEGER AUTO_INCREMENT PRIMARY KEY,
         user_id     INTEGER NOT NULL,
-        text        VARCHAR(255) NOT NULL
+        text        VARCHAR(255) NOT NULL,
+        date_query  DATETIME 
         )
     ''')
 
     conn.commit()
 
 
-def add_message(user_id: int, text: str):
+def add_message(user_id: int, text: str, date_query):
     conn = get_connection()
     cursor = conn.cursor()
-    sql = "INSERT INTO user_message(user_id, text) VALUES (%s, %s)"
-    val = (user_id, text)
+    sql = '''INSERT INTO user_query(user_id, text, date_query) VALUES (%s, %s, %s)'''
+    val = (user_id, text, date_query)
     cursor.execute(sql, val)
     conn.commit()
+    conn.close()
