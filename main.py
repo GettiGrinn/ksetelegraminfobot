@@ -15,13 +15,13 @@ dp = Dispatcher(bot)
 @dp.message_handler(Command("start"))
 async def show_menu(message: Message):
     await message.answer(text="Выберите из списка необходимую опцию\n", reply_markup=user_menu)
-    add_message(message.from_user.id, message.text)
+    add_message(message.from_user.id, message.text, message.date)
 
 
 @dp.message_handler(Command("update"))
 async def show_menu(message: Message):
     await message.answer(text="Выберите из списка необходимую опцию \n", reply_markup=user_menu)
-    add_message(message.from_user.id, message.text)
+    add_message(message.from_user.id, message.text, message.date)
 
 
 @dp.message_handler(Text(equals=["Котировки \U0001F4CA", "Итоги последних сделок \U0001F4DD",
@@ -41,13 +41,13 @@ async def show_menu(message: Message):
     else:
         await message.answer("Опция находится в разработке")
 
-    add_message(message.from_user.id, message.text)
+    add_message(message.from_user.id, message.text, message.date)
 
 
 @dp.message_handler()
 async def echo_message(message: Message):
     await message.answer(get_listing_result(message.text))
-    add_message(message.from_user.id, message.text)
+    add_message(message.from_user.id, message.text, message.date)
 
 
 @dp.callback_query_handler(text_contains="company")
