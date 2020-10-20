@@ -3,32 +3,14 @@ import mysql.connector
 
 def get_connection():
     connection = mysql.connector.connect(
-          host="sql12.freemysqlhosting.net",
-          user="sql12368189",
-          password="C3pc4Wu3bJ",
-          database="sql12368189",
-          port="3306"
+        host="sql12.freemysqlhosting.net",
+        user="sql12368189",
+        password="C3pc4Wu3bJ",
+        database="sql12368189",
+        port="3306"
     )
 
     return connection
-
-
-def init_db(force: bool = False):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    if force:
-        cursor.execute('DROP TABLE IF EXISTS user_query')
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS user_query(
-        id          INTEGER AUTO_INCREMENT PRIMARY KEY,
-        user_id     INTEGER NOT NULL,
-        text        VARCHAR(255) NOT NULL,
-        date_query  DATETIME 
-        )
-    ''')
-
-    conn.commit()
 
 
 def add_message(user_id: int, text: str, date_query):
@@ -39,3 +21,41 @@ def add_message(user_id: int, text: str, date_query):
     cursor.execute(sql, val)
     conn.commit()
     conn.close()
+
+
+def add_notification(user_id: int, notification_text: str, date_query):
+    conn = get_connection()
+    cursor = conn.cursor()
+    sql = '''
+        INSERT INTO user_notifications (user_id, notification_text, date_query)
+        SELECT * FROM (SELECT '''+str(user_id)+''', "'''+notification_text+'''", "'''+str(date_query)+'''") AS tmp
+        WHERE NOT EXISTS (
+            SELECT user_id, notification_text  FROM user_notifications
+            WHERE user_id='''+str(user_id)+''' AND notification_text = "'''+notification_text+'''"
+        ) LIMIT 1;
+    '''
+
+    print(sql)
+    cursor.execute(sql)
+    conn.commit()
+    conn.close()
+
+
+def del_notification(user_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    sql = '''DELETE FROM `user_notifications` WHERE user_id =''' + str(user_id)
+    cursor.execute(sql)
+    conn.commit()
+    conn.close()
+
+
+def get_notifications_list():
+    conn = get_connection()
+    cursor = conn.cursor()
+    sql = '''SELECT * from `user_notifications`'''
+    cursor.execute(sql)
+    myresult = cursor.fetchall()
+    # conn.commit()
+    conn.close()
+    return myresult
