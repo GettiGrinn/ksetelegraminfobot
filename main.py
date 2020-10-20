@@ -114,7 +114,7 @@ async def periodic():
         minute = now.minute
         second = now.second
 
-        if today == now.day and hour == 11 and minute == 15 and second == 00:
+        if today == now.day and hour == 11 and minute == 30 and second == 00:
           
             result = get_notifications_list()
             if len(result) != 0:
