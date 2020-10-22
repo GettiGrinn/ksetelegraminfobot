@@ -125,7 +125,7 @@ async def periodic():
 
 
 if __name__ == '__main__':
-#     loop = asyncio.get_event_loop()
-#     loop.create_task(periodic())
+    loop = asyncio.get_event_loop()
+    loop.create_task(periodic())
     executor.start_polling(dp,loop=loop)
   
