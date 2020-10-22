@@ -51,7 +51,7 @@ async def show_menu(message: Message):
 @dp.callback_query_handler(text_contains="notification_securities")
 async def get_reply_not_securities(callback_query: CallbackQuery):
     await callback_query.answer(cache_time=10)
-    await callback_query.message.answer("Напишите код ценной бумаги для оповещения в формате !КОД, например:  !KNB")
+    await callback_query.message.answer("Напишите код ценной бумаги для оповещения в формате !Торговый Символ, например:  !RSBK")
 
 
 @dp.message_handler(Text(startswith=["!"]))
@@ -105,27 +105,27 @@ async def send_character_page(message, page=1):
     )
 
 
-# async def periodic():
-#     while True:
-#         # await asyncio.sleep(sleep_for)
-#         now = datetime.datetime.now()
-#         today = now.day
-#         hour = now.hour
-#         minute = now.minute
-#         second = now.second
+async def periodic():
+    while True:
+        # await asyncio.sleep(sleep_for)
+        now = datetime.datetime.now()
+        today = now.day
+        hour = now.hour
+        minute = now.minute
+        second = now.second
 
-#         if today == now.day and hour == 11 and minute == 30 and second == 00:
+        if today == now.day and hour == 11 and minute == 30 and second == 00:
           
-#             result = get_notifications_list()
-#             if len(result) != 0:
-#                 for res in result:
-#                     print(res[1], res[2])
-#                     await bot.send_message(res[1], get_not_result(res[2]))
-#             break
+            result = get_notifications_list()
+            if len(result) != 0:
+                for res in result:
+                    print(res[1], res[2])
+                    await bot.send_message(res[1], get_not_result(res[2]))
+            
 
 
 if __name__ == '__main__':
 #     loop = asyncio.get_event_loop()
 #     loop.create_task(periodic())
-    executor.start_polling(dp)
+    executor.start_polling(dp,loop=loop)
   
