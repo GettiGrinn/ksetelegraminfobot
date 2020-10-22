@@ -105,27 +105,27 @@ async def send_character_page(message, page=1):
     )
 
 
-async def periodic():
-    while True:
-        # await asyncio.sleep(sleep_for)
-        now = datetime.datetime.now()
-        today = now.day
-        hour = now.hour
-        minute = now.minute
-        second = now.second
+# async def periodic():
+#     while True:
+#         # await asyncio.sleep(sleep_for)
+#         now = datetime.datetime.now()
+#         today = now.day
+#         hour = now.hour
+#         minute = now.minute
+#         second = now.second
 
-        if today == now.day and hour == 11 and minute == 30 and second == 00:
+#         if today == now.day and hour == 11 and minute == 30 and second == 00:
           
-            result = get_notifications_list()
-            if len(result) != 0:
-                for res in result:
-                    print(res[1], res[2])
-                    await bot.send_message(res[1], get_not_result(res[2]))
-            break
+#             result = get_notifications_list()
+#             if len(result) != 0:
+#                 for res in result:
+#                     print(res[1], res[2])
+#                     await bot.send_message(res[1], get_not_result(res[2]))
+#             break
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.create_task(periodic())
-    executor.start_polling(dp, loop=loop)
+#     loop = asyncio.get_event_loop()
+#     loop.create_task(periodic())
+    executor.start_polling(dp)
   
